@@ -65,6 +65,17 @@ describe("Rover class", function() {
 
     expect(testRover.receiveMessage(moveMessage).results[0].completed).toBe(false);
     expect(testRover.position).toBe(12345);
-  })
+  });
+
+  test("responds with the position for the move command", function(){
+    let testRover = new Rover(12345);
+    let moveCommand = [new Command('MOVE', 56789)];
+    let moveMessage = new Message('Move rover to 56789', moveCommand);
+
+    expect(testRover.position).toBe(12345);
+
+    testRover.receiveMessage(moveMessage);
+    expect(testRover.position).toBe(56789);
+  });
 
 });

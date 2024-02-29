@@ -18,7 +18,7 @@ class Rover {
             let resultReturned = {}
             if (this.mode === 'NORMAL') {
                resultReturned.completed = true;
-               this.position = command.value;
+               this.position = commands[i].value;
                results.push(resultReturned);
             } else {
                resultReturned.completed = false;
