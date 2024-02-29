@@ -7,34 +7,40 @@ class Rover {
    }
 
    receiveMessage(message) {
-      let commands = [message.commands];
+      let response = { name: message.name }
+      let commands = message.commands;
+      // console.log(commands);
       let results = [];
+      // console.log(`commands.length: ${commands.length}`);
       for (let i = 0; i < commands.length; i++) {
+         // console.log(i);
          if (commands[i].commandType === 'MOVE') {
-            if (this.mode === 'LOW_POWER') {
-               results.push({complete: false})
-            } else {
+            let resultReturned = {}
+            if (this.mode === 'NORMAL') {
+               resultReturned.completed = true;
                this.position = command.value;
-               results.push({completed: true});
+               results.push(resultReturned);
+            } else {
+               resultReturned.completed = false;
+               results.push(resultReturned);
             }
          } else if (commands[i].commandType === 'MODE_CHANGE') {
-            this.mode = command.value;
-            results.push({complete: true});
+            let resultReturned = {}
+            this.mode = commands[i].value;
+            resultReturned.completed = true;
+            results.push(resultReturned);
          } else if (commands[i].commandType === 'STATUS_CHECK') {
-            results.push({
-               completed: true,
-               roverStatus: {
-                  mode: this.mode,
-                  generatorWatts: this.generatorWatts,
-                  position: this.position
-               }
-            });
+            let resultReturned = {}
+            resultReturned.completed = true;
+            resultReturned.roverStatus = {
+               mode: this.mode,
+               generatorWatts: this.generatorWatts,
+               position: this.position
+            }
+            results.push(resultReturned);
          }
       }
-      let response = {
-         name: message.name,
-         results: results
-      };
+      response.results = results;
       return response;
    }
 }
